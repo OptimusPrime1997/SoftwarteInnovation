@@ -2,9 +2,13 @@ package cn.edu.sjtu.ipads.layer1;
 
 import cn.edu.sjtu.ipads.*;
 import cn.edu.sjtu.ipads.layer1.services.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +36,7 @@ public class BuyerController {
     @Autowired
     StoreHomepageServiceClient homepageServiceClient;
 
+
     /**
      * 查看店铺首页
      * 店铺信息、店铺首页信息
@@ -40,7 +45,9 @@ public class BuyerController {
      * @return
      */
     @GetMapping("store/{storeId}")
-    public Response<?> storePage(@PathVariable("storeId") String storeId, @RequestParam String
+    @ApiOperation("查看店铺首页;包含店铺信息,店铺首页信息;当前用户信息")
+    public Response<?> storePage(@ApiParam("店铺编号") @PathVariable("storeId") String storeId,
+            @ApiParam("用户编号")@RequestParam String
             customerId) {
         StoreHomePage homePage = homepageServiceClient.homePage(storeId);
         Customer customer = buyerInfoClient.getCustomer(customerId);
@@ -58,7 +65,10 @@ public class BuyerController {
      * @return
      */
     @GetMapping("item/{itemId}")
-    public Response<?> itemDetailInfo(@PathVariable("itemId") String itemId, @RequestParam String customerId) {
+    @ApiOperation("查看商品详细信息;包含商品当前详细信息,店铺信息,买家信息")
+    public Response<?> itemDetailInfo(@ApiParam("商品编号")@PathVariable("itemId") String itemId,
+            @ApiParam("用户编号")@RequestParam
+            String customerId) {
         ItemInfo itemInfo = itemInfoClient.singleItem(itemId);
         Store store = storeServiceClient.storeInfo(itemInfo.getStoreId());
         Customer customer = buyerInfoClient.getCustomer(customerId);
@@ -78,7 +88,8 @@ public class BuyerController {
      * @return
      */
     @PostMapping("order")
-    public Response<?> newOrder(@RequestBody OrderRequest orderRequest) {
+    @ApiOperation("购买一件商品")
+    public Response<?> newOrder(@ApiParam("请求下单信息")@RequestBody OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderId(Util.idGenerate("order"));
         order.setCustomerId(orderRequest.getCustomerId());

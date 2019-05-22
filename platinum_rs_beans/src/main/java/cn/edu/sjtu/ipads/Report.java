@@ -1,5 +1,8 @@
 package cn.edu.sjtu.ipads;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 
 /**
@@ -14,16 +17,25 @@ import java.util.List;
  * 用户消费排行
  * 订单时段分析
  */
+@ApiModel("分析报告")
 public class Report {
+    @ApiModelProperty("总的用户数量")
     int customerNumber;
+    @ApiModelProperty("总的店铺数量")
     int storeNumber;
+    @ApiModelProperty("总的订单数量")
     int totalOrder;
+    @ApiModelProperty("总的销售数量")
     int totalSales;
     //top 10
+    @ApiModelProperty("top 10销量的店铺")
     List<SalesResult> storeRank;
+    @ApiModelProperty("top 10购买的用户")
     List<SalesResult> customerRank;
+    @ApiModelProperty("top 10销量的商品")
     List<SalesResult> itemRank;
     //24小时的订单数量分析
+    @ApiModelProperty("最近24小时的订单数量情况,每小时一次统计")
     int [] dayOrderHist;
 
 

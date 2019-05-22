@@ -1,5 +1,8 @@
 package cn.edu.sjtu.ipads;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -9,14 +12,23 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Daniel
  * @since 2019/3/29 9:06
  */
+@ApiModel("商品信息")
 public class ItemInfo {
+    @ApiModelProperty("商品编号")
     private String itemId;
+    @ApiModelProperty("商品名称")
     private String name;
+    @ApiModelProperty("商品描述")
     private String desp;
+    @ApiModelProperty("店铺编号")
     private String storeId;
+    @ApiModelProperty("发布日期")
     private String publishTime;
+    @ApiModelProperty("价格")
     private Double price;
+    @ApiModelProperty("月销量")
     private Integer monthSold;
+    @ApiModelProperty("库存数量")
     private Integer left;
 
 

@@ -3,12 +3,17 @@ package cn.edu.sjtu.ipads.layer2;
 import cn.edu.sjtu.ipads.ItemInfo;
 import cn.edu.sjtu.ipads.Response;
 import cn.edu.sjtu.ipads.Util;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +25,19 @@ import java.util.concurrent.locks.ReentrantLock;
 @SpringBootApplication
 @EnableEurekaClient
 @RestController
+@EnableSwagger2
 public class ItemInfoService {
     Map<String, Map<String, ItemInfo>> storeItems = new ConcurrentHashMap<>();
     Map<String, ItemInfo> itemInfoMap = new ConcurrentHashMap<>();
 
+
+    @GetMapping("/info")
+    void info(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/swagger-ui.html");
+    }
+
     @GetMapping("/iteminfo/store/{storeId}")
+    @ApiOperation("获得店铺的所有商品信息")
     public Response<Map<String, ItemInfo>> storeItems(@PathVariable("storeId") String storeId) {
         Map<String, ItemInfo> result;
         result = storeItems.get(storeId);
@@ -34,8 +47,9 @@ public class ItemInfoService {
     }
 
     @PostMapping("/iteminfo/store/{storeId}")
-    public Response<?> publishItems(@PathVariable("storeId") String storeId,
-                                    @RequestBody List<ItemInfo> items) {
+    @ApiOperation("发布一件商品")
+    public Response<?> publishItems(@ApiParam("店铺编号") @PathVariable("storeId") String storeId,
+                                    @ApiParam("发布的商品信息")@RequestBody List<ItemInfo> items) {
         if (!storeItems.containsKey(storeId)) {
             storeItems.put(storeId, new ConcurrentHashMap<>());
         }
@@ -52,7 +66,9 @@ public class ItemInfoService {
     }
 
     @PutMapping("/iteminfo/single/{itemId}")
-    public Response<?> updateItem(@PathVariable("itemId") String itemId, @RequestBody ItemInfo item) {
+    @ApiOperation("更新一件商品")
+    public Response<?> updateItem(@ApiParam("商品编号")@PathVariable("itemId") String itemId,
+                                  @ApiParam("商品信息")@RequestBody ItemInfo item) {
         ItemInfo itemInfo = itemInfoMap.get(itemId);
         if (itemInfo == null)
             return Response.FAILED;
@@ -61,7 +77,9 @@ public class ItemInfoService {
     }
 
     @PutMapping("/iteminfo/newOrders")
-    public Response<?> newOrders(@RequestBody Map<String, Integer> orderInfo) {
+    @ApiOperation("创建一个新的订单")
+    public Response<?> newOrders(@ApiParam("订单信息,商品编号->商品数量")@RequestBody Map<String, Integer>
+                                             orderInfo) {
         for (String key : orderInfo.keySet()) {
             ItemInfo itemInfo = itemInfoMap.get(key);
             itemInfo.sold(orderInfo.get(key));
@@ -70,7 +88,9 @@ public class ItemInfoService {
     }
 
     @PutMapping("/iteminfo/instock")
-    public Response<?> inStock(@RequestBody Map<String, Integer> stockInfo) {
+    @ApiOperation("商品入库,增加商品库存数量")
+    public Response<?> inStock(@ApiParam("库存增加信息,商品编号->数量")@RequestBody Map<String, Integer>
+                                           stockInfo) {
         for (String key : stockInfo.keySet()) {
             ItemInfo itemInfo = itemInfoMap.get(key);
             itemInfo.instock(stockInfo.get(key));
@@ -79,7 +99,8 @@ public class ItemInfoService {
     }
 
     @GetMapping("/iteminfo/single/{itemId}")
-    public Response<?> singleItem(@PathVariable("itemId") String itemId) {
+    @ApiOperation("获得单个商品信息")
+    public Response<?> singleItem(@ApiParam("商品编号")@PathVariable("itemId") String itemId) {
         ItemInfo itemInfo = itemInfoMap.get(itemId);
         if (itemInfo == null)
             return Response.FAILED;
@@ -88,6 +109,7 @@ public class ItemInfoService {
 
 
     @GetMapping("/iteminfo")
+    @ApiOperation("获得所有的商品信息")
     public Response<Map<String, ItemInfo>> allItems() {
         return new Response<>(itemInfoMap);
     }

@@ -1,0 +1,1 @@
+cat info.pid | xargs kill -9

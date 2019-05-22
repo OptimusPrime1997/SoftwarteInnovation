@@ -1,0 +1,48 @@
+JAR_PATH=../artifacts/
+LOG_PATH=../log/
+PID_FILE=info.pid
+config_server=$(ls $JAR_PATH | grep config-server)
+eureka_service=$(ls $JAR_PATH | grep eureka)
+
+all_services=$(ls $JAR_PATH)
+
+if [ ! -e $LOG_PATH ]
+then
+	mkdir $LOG_PATH
+fi
+
+
+if [ ! -e $PID_FILE ]
+then
+	touch $PID_FILE
+fi
+
+#先启动config-server
+nohup java -jar $JAR_PATH/$config_server > $LOG_PATH/config-server.log 2>&1 &
+config_server_pid=$!
+echo $config_server_pid >> $PID_FILE
+
+#等待启动结束
+sleep 4
+echo "config server start up [pid:$config_server_pid]"
+
+#再是eureka-service
+nohup java -jar $JAR_PATH/$eureka_service > $LOG_PATH/eureka-service.log 2>&1 &
+eureka_service_pid=$!
+echo $eureka_service_pid >> $PID_FILE
+sleep 6
+echo "eureka service start up [pid:$eureka_service_pid]"
+
+for service in $all_services
+do
+	if [ "$service" != "$config_server" ] && [ "$service" != "$eureka_service" ]
+	then
+		service_name=${service%%-0*}
+		nohup java -jar $JAR_PATH/$service > $LOG_PATH/${service_name}.log 2>&1 &
+		service_pid=$!
+		echo "service $service_name start up[pid:$service_pid]"
+		echo $service_pid >> $PID_FILE
+	fi
+done
+
+

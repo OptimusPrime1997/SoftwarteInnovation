@@ -3,11 +3,17 @@ package cn.edu.sjtu.ipads.layer2;
 import cn.edu.sjtu.ipads.Customer;
 import cn.edu.sjtu.ipads.Response;
 import cn.edu.sjtu.ipads.Util;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @RestController
 @SpringBootApplication
 @EnableEurekaClient
+@EnableSwagger2
 public class BuyerInfoService {
     Map<String, Customer> customerContainer = new ConcurrentHashMap<>();
 
@@ -31,18 +38,28 @@ public class BuyerInfoService {
         return customerContainer.get(customerId);
     }
 
+
+    @GetMapping("/info")
+    void info(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/swagger-ui.html");
+    }
+
     @GetMapping("/customer")
+    @ApiOperation("获得所有的用户信息")
     public Response<Collection<Customer>> allCustomer() {
         return new Response<>(customerContainer.values());
     }
 
     @GetMapping("/customer/number")
+    @ApiOperation("返回总的用户数量")
     public Response<Integer> totalNumber() {
         return new Response<>(customerContainer.size());
     }
 
     @GetMapping("/customer/{customerId}")
-    public Response<Customer> profile(@PathVariable("customerId") String customerId) {
+    @ApiOperation("返回单个用户的个人信息")
+    public Response<Customer> profile(@ApiParam("用户编号") @PathVariable("customerId")
+                                                  String customerId) {
         Customer customer = findById(customerId);
         if (customer != null) {
             return new Response<>(customer);
@@ -51,7 +68,8 @@ public class BuyerInfoService {
     }
 
     @PostMapping("/customer")
-    public Response<?> addCustomer(@RequestBody Customer customer) {
+    @ApiOperation("新增一个用户")
+    public Response<?> addCustomer(@ApiParam("用户信息") @RequestBody Customer customer) {
         customer.setCustomerId(Util.idGenerate("customer"));
         customer.setLevel(0);
         customer.setCurrentSP(0);
@@ -60,7 +78,9 @@ public class BuyerInfoService {
     }
 
     @PutMapping("/customer/{customerId}/sp")
-    public Response<?> addSP(@PathVariable("customerId") String customerId, @RequestParam Integer sp) {
+    @ApiOperation("增加用户经验值")
+    public Response<?> addSP(@ApiParam("用户编号") @PathVariable("customerId") String customerId
+            , @RequestParam @ApiParam("经验值") Integer sp) {
         Customer customer = customerContainer.get(customerId);
         customer.addSp(sp);
         return Response.SUCCESS;

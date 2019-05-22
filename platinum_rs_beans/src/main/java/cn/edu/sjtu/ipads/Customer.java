@@ -2,6 +2,8 @@ package cn.edu.sjtu.ipads;
 
 
 import com.sun.scenario.effect.InvertMask;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Map;
 
@@ -9,13 +11,21 @@ import java.util.Map;
  * @author Daniel
  * @since 2019/3/27 19:50
  */
+@ApiModel("用户信息")
 public class Customer {
+    @ApiModelProperty("用户编号")
     private String customerId;
+    @ApiModelProperty("昵称")
     private String nickname;
+    @ApiModelProperty("性别")
     private Gender gender;
+    @ApiModelProperty("年龄")
     private Integer age;
+    @ApiModelProperty("地址")
     private String address;
+    @ApiModelProperty("等级")
     private Integer level;
+    @ApiModelProperty("当前经验值")
     private Integer currentSP;
 
     public Customer() {

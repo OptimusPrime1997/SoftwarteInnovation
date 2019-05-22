@@ -1,29 +1,42 @@
 package cn.edu.sjtu.ipads.layer2;
 
 import cn.edu.sjtu.ipads.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootApplication
 @EnableEurekaClient
 @RestController
+@EnableSwagger2
 public class OrderService {
     Map<String, Order> orderContainer = new ConcurrentHashMap<>();
     Map<String, Map<String, Order>> customerOrder = new ConcurrentHashMap<>();
     Map<String, Map<String, Order>> storeOrder = new ConcurrentHashMap<>();
     Map<String, Map<String, Order>> itemOrder = new ConcurrentHashMap<>();
 
+    @GetMapping("/info")
+    void info(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/swagger-ui.html");
+    }
+
     @GetMapping("/order/number")
+    @ApiOperation("获得订单总数")
     public Response<Integer> totalNumber() {
         return new Response<>(orderContainer.size());
     }
 
     @GetMapping("/order/rank/customer")
+    @ApiOperation("获得客户排名")
     public Response<List<SalesResult>> customerRank() {
         PriorityQueue<SalesResult> p = new PriorityQueue<>(new Comparator<SalesResult>() {
             @Override
@@ -49,6 +62,7 @@ public class OrderService {
 
 
     @GetMapping("/order/rank/store")
+    @ApiOperation("获得店铺排名")
     public Response<List<SalesResult>> storeRank() {
         PriorityQueue<SalesResult> p = new PriorityQueue<>(new Comparator<SalesResult>() {
             @Override
@@ -73,6 +87,7 @@ public class OrderService {
     }
 
     @GetMapping("/order/rank/item")
+    @ApiOperation("获得商品排名")
     public Response<List<SalesResult>> itemRank() {
         PriorityQueue<SalesResult> p = new PriorityQueue<>(new Comparator<SalesResult>() {
             @Override
@@ -98,12 +113,14 @@ public class OrderService {
 
 
     @GetMapping("/order")
+    @ApiOperation("返回所有订单")
     public Response<Collection<Order>> allOrders() {
         return new Response<>(orderContainer.values());
     }
 
     @PostMapping("/order")
-    public Response<?> addOrder(@RequestBody Order order) {
+    @ApiOperation("添加一个订单")
+    public Response<?> addOrder(@RequestBody @ApiParam("订单信息") Order order) {
         order.setDateTime(Util.currentDateTime());
 
         orderContainer.put(order.getOrderId(), order);
@@ -130,24 +147,30 @@ public class OrderService {
     }
 
     @GetMapping("/order/customer/{customerId}")
-    public Response<Collection<Order>> customerOrder(@PathVariable("customerId") String customerId) {
+    @ApiOperation("返回某个用户的订单")
+    public Response<Collection<Order>> customerOrder(@ApiParam("客户编号")
+                                                     @PathVariable("customerId")
+                                                             String customerId) {
         if (customerOrder.containsKey(customerId))
             return new Response<>(customerOrder.get(customerId).values());
         return new Response<>(new ArrayList<>());
     }
 
     @GetMapping("/order/item/{itemId}")
-    public Response<Collection<Order>> itemOrder(@PathVariable("itemId") String itemId) {
+    @ApiOperation("返回包含所有商品的订单")
+    public Response<Collection<Order>> itemOrder(@ApiParam("商品编号") @PathVariable("itemId")
+                                                             String itemId) {
         if (itemOrder.containsKey(itemId))
             return new Response<>(itemOrder.get(itemId).values());
         return new Response<>(new ArrayList<>());
     }
 
-    @GetMapping("/order/range/{startTime}/{endTime}")
-    public Response<List<Order>> findRangeOrder(@PathVariable("startTime") String startTime,
-                                                @PathVariable("endTime") String endTime) {
-        return Response.SUCCESS;
-    }
+//    @GetMapping("/order/range/{startTime}/{endTime}")
+//    @ApiOperation("返回某个时间段内的所有订单")
+//    public Response<List<Order>> findRangeOrder(@PathVariable("startTime") String startTime,
+//                                                @PathVariable("endTime") String endTime) {
+//        return Response.SUCCESS;
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(OrderService.class, args);

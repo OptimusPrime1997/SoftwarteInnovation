@@ -1,14 +1,21 @@
 package cn.edu.sjtu.ipads;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Map;
 
 /**
  * @author Daniel
  * @since 2019/3/31 21:28
  */
+@ApiModel("销售统计结果")
 public class SalesResult {
+    @ApiModelProperty("统计对象的编号")
     String key;
+    @ApiModelProperty("统计对象的信息")
     Object dataObject;
+    @ApiModelProperty("总量")
     Double total;
 
     public SalesResult(Map<String, Object> res) {

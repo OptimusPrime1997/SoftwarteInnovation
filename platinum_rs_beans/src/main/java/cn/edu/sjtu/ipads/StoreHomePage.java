@@ -1,5 +1,8 @@
 package cn.edu.sjtu.ipads;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 import java.util.Map;
 
@@ -7,9 +10,13 @@ import java.util.Map;
  * @author Daniel
  * @since 2019/3/31 16:54
  */
+@ApiModel("店铺主页")
 public class StoreHomePage {
+    @ApiModelProperty("店铺编号")
     String storeId;
+    @ApiModelProperty("店铺所有商品编号")
     List<String> itemIds;
+    @ApiModelProperty("店铺主页的数据信息")
     String homePageData;
 
     public StoreHomePage() {

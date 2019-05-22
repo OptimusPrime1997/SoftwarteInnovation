@@ -5,9 +5,14 @@ import cn.edu.sjtu.ipads.layer1.services.BuyerInfoClient;
 import cn.edu.sjtu.ipads.layer1.services.ItemInfoClient;
 import cn.edu.sjtu.ipads.layer1.services.OrderServiceClient;
 import cn.edu.sjtu.ipads.layer1.services.StoreServiceClient;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +35,14 @@ public class SellerController {
     @Autowired
     private OrderServiceClient orderServiceClient;
 
+
     /**
      * 分析报告
      *
      * @return
      */
     @GetMapping(value = "/report")
+    @ApiOperation("分析报告;包含商品分析,店铺分析和用户分析")
     public Response<Report> report() {
         Report report = new Report();
         int customerNumber = buyerInfoClient.totalCustomer();
@@ -80,8 +87,9 @@ public class SellerController {
     }
 
     @PutMapping(value = "/publishItem")
-    public Response<?> publishItems(@RequestBody List<ItemInfo> itemInfos, @RequestParam String
-            storeId) {
+    @ApiOperation("发布商品")
+    public Response<?> publishItems(@ApiParam("所有商品信息") @RequestBody List<ItemInfo> itemInfos,
+                                    @ApiParam("店铺编号")@RequestParam String storeId) {
 
         Response res = itemInfoClient.publishItem(storeId, itemInfos);
         boolean res1 = storeServiceClient.pubItem(storeId, itemInfos.size());

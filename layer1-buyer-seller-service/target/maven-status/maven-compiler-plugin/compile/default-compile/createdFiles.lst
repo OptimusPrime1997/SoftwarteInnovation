@@ -1,9 +1,0 @@
-cn/edu/sjtu/ipads/layer1/services/OrderServiceClient.class
-cn/edu/sjtu/ipads/layer1/services/ItemInfoClient.class
-cn/edu/sjtu/ipads/layer1/services/StoreHomepageServiceClient.class
-cn/edu/sjtu/ipads/layer1/services/URLHelper.class
-cn/edu/sjtu/ipads/layer1/services/BuyerInfoClient.class
-cn/edu/sjtu/ipads/layer1/services/StoreServiceClient.class
-cn/edu/sjtu/ipads/layer1/Layer1Application.class
-cn/edu/sjtu/ipads/layer1/BuyerController.class
-cn/edu/sjtu/ipads/layer1/SellerController.class

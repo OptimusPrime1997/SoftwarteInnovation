@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-build_dirs=("buyer-info-service" "item-info-service" "layer1-buyer-seller-service" "order-service" "spring-cloud-eureka-service" "store-service")
+build_dirs=("config-center-service" "buyer-info-service" "item-info-service"
+"layer1-buyer-seller-service"
+"order-service" "spring-cloud-eureka-service" "store-service")
 cd platinum_rs_beans
-mvn clean install
+mvn clean install -DSkipTests=True
 cd ..
 for value in ${build_dirs[@]}
 do
@@ -11,6 +13,9 @@ do
 	cd ..
 done
 
-mkdir artifacts
+if [ ! -e artifacts ]
+then
+    mkdir artifacts
+fi
 
 cp *service/target/*.jar artifacts/

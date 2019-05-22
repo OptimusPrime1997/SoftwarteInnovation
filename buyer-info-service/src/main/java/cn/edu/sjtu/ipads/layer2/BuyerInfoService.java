@@ -59,7 +59,7 @@ public class BuyerInfoService {
     @GetMapping("/customer/{customerId}")
     @ApiOperation("返回单个用户的个人信息")
     public Response<Customer> profile(@ApiParam("用户编号") @PathVariable("customerId")
-                                                  String customerId) {
+                                              String customerId) {
         Customer customer = findById(customerId);
         if (customer != null) {
             return new Response<>(customer);

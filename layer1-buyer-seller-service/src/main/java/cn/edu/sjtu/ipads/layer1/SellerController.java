@@ -89,13 +89,12 @@ public class SellerController {
     @PutMapping(value = "/publishItem")
     @ApiOperation("发布商品")
     public Response<?> publishItems(@ApiParam("所有商品信息") @RequestBody List<ItemInfo> itemInfos,
-                                    @ApiParam("店铺编号")@RequestParam String storeId) {
+                                    @ApiParam("店铺编号") @RequestParam String storeId) {
 
         Response res = itemInfoClient.publishItem(storeId, itemInfos);
         boolean res1 = storeServiceClient.pubItem(storeId, itemInfos.size());
         return res.resCode == 0 && res1 ? Response.SUCCESS : Response.FAILED;
     }
-
 
 
 }

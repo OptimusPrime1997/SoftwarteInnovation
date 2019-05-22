@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author yanpenglei
  * @create 2017-12-06 15:26
  **/
@@ -47,8 +46,8 @@ public class BuyerController {
     @GetMapping("store/{storeId}")
     @ApiOperation("查看店铺首页;包含店铺信息,店铺首页信息;当前用户信息")
     public Response<?> storePage(@ApiParam("店铺编号") @PathVariable("storeId") String storeId,
-            @ApiParam("用户编号")@RequestParam String
-            customerId) {
+                                 @ApiParam("用户编号") @RequestParam String
+                                         customerId) {
         StoreHomePage homePage = homepageServiceClient.homePage(storeId);
         Customer customer = buyerInfoClient.getCustomer(customerId);
         Map<String, Object> result = new HashMap<>();
@@ -66,9 +65,9 @@ public class BuyerController {
      */
     @GetMapping("item/{itemId}")
     @ApiOperation("查看商品详细信息;包含商品当前详细信息,店铺信息,买家信息")
-    public Response<?> itemDetailInfo(@ApiParam("商品编号")@PathVariable("itemId") String itemId,
-            @ApiParam("用户编号")@RequestParam
-            String customerId) {
+    public Response<?> itemDetailInfo(@ApiParam("商品编号") @PathVariable("itemId") String itemId,
+                                      @ApiParam("用户编号") @RequestParam
+                                              String customerId) {
         ItemInfo itemInfo = itemInfoClient.singleItem(itemId);
         Store store = storeServiceClient.storeInfo(itemInfo.getStoreId());
         Customer customer = buyerInfoClient.getCustomer(customerId);
@@ -89,7 +88,7 @@ public class BuyerController {
      */
     @PostMapping("order")
     @ApiOperation("购买一件商品")
-    public Response<?> newOrder(@ApiParam("请求下单信息")@RequestBody OrderRequest orderRequest) {
+    public Response<?> newOrder(@ApiParam("请求下单信息") @RequestBody OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderId(Util.idGenerate("order"));
         order.setCustomerId(orderRequest.getCustomerId());
@@ -107,9 +106,9 @@ public class BuyerController {
 
         boolean result;
         //更新商品库存信息
-        Map<String,Integer> orderInfoMap = new HashMap<>();
-        for(OrderItemInfo itemInfo:orderInfo){
-            orderInfoMap.put(itemInfo.getItemId(),itemInfo.getCount());
+        Map<String, Integer> orderInfoMap = new HashMap<>();
+        for (OrderItemInfo itemInfo : orderInfo) {
+            orderInfoMap.put(itemInfo.getItemId(), itemInfo.getCount());
         }
         result = itemInfoClient.newOrder(orderInfoMap);
         if (!result) {

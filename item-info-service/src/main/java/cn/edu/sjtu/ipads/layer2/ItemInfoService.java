@@ -49,7 +49,7 @@ public class ItemInfoService {
     @PostMapping("/iteminfo/store/{storeId}")
     @ApiOperation("发布一件商品")
     public Response<?> publishItems(@ApiParam("店铺编号") @PathVariable("storeId") String storeId,
-                                    @ApiParam("发布的商品信息")@RequestBody List<ItemInfo> items) {
+                                    @ApiParam("发布的商品信息") @RequestBody List<ItemInfo> items) {
         if (!storeItems.containsKey(storeId)) {
             storeItems.put(storeId, new ConcurrentHashMap<>());
         }
@@ -67,8 +67,8 @@ public class ItemInfoService {
 
     @PutMapping("/iteminfo/single/{itemId}")
     @ApiOperation("更新一件商品")
-    public Response<?> updateItem(@ApiParam("商品编号")@PathVariable("itemId") String itemId,
-                                  @ApiParam("商品信息")@RequestBody ItemInfo item) {
+    public Response<?> updateItem(@ApiParam("商品编号") @PathVariable("itemId") String itemId,
+                                  @ApiParam("商品信息") @RequestBody ItemInfo item) {
         ItemInfo itemInfo = itemInfoMap.get(itemId);
         if (itemInfo == null)
             return Response.FAILED;
@@ -78,8 +78,8 @@ public class ItemInfoService {
 
     @PutMapping("/iteminfo/newOrders")
     @ApiOperation("创建一个新的订单")
-    public Response<?> newOrders(@ApiParam("订单信息,商品编号->商品数量")@RequestBody Map<String, Integer>
-                                             orderInfo) {
+    public Response<?> newOrders(@ApiParam("订单信息,商品编号->商品数量") @RequestBody Map<String, Integer>
+                                         orderInfo) {
         for (String key : orderInfo.keySet()) {
             ItemInfo itemInfo = itemInfoMap.get(key);
             itemInfo.sold(orderInfo.get(key));
@@ -89,8 +89,8 @@ public class ItemInfoService {
 
     @PutMapping("/iteminfo/instock")
     @ApiOperation("商品入库,增加商品库存数量")
-    public Response<?> inStock(@ApiParam("库存增加信息,商品编号->数量")@RequestBody Map<String, Integer>
-                                           stockInfo) {
+    public Response<?> inStock(@ApiParam("库存增加信息,商品编号->数量") @RequestBody Map<String, Integer>
+                                       stockInfo) {
         for (String key : stockInfo.keySet()) {
             ItemInfo itemInfo = itemInfoMap.get(key);
             itemInfo.instock(stockInfo.get(key));
@@ -100,7 +100,7 @@ public class ItemInfoService {
 
     @GetMapping("/iteminfo/single/{itemId}")
     @ApiOperation("获得单个商品信息")
-    public Response<?> singleItem(@ApiParam("商品编号")@PathVariable("itemId") String itemId) {
+    public Response<?> singleItem(@ApiParam("商品编号") @PathVariable("itemId") String itemId) {
         ItemInfo itemInfo = itemInfoMap.get(itemId);
         if (itemInfo == null)
             return Response.FAILED;

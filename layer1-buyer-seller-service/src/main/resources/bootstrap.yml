@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      profile: dev
+      uri: http://localhost:9001/
+
+management:
+  security:
+    enabled: false
+

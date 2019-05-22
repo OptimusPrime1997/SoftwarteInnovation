@@ -1,5 +1,6 @@
 package cn.edu.sjtu.ipads.layer1;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -21,9 +22,17 @@ import java.io.IOException;
 @RestController
 public class Layer1Application {
 
+    @Value("${key}")
+    private String key;
+
     @GetMapping("/info")
     void info(HttpServletResponse response) throws IOException {
         response.sendRedirect("/swagger-ui.html");
+    }
+
+    @GetMapping("/key")
+    String key() {
+        return key;
     }
 
     @Bean

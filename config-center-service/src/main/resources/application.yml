@@ -9,6 +9,6 @@ spring:
           search-paths: config
 
 server:
-  port: 9001
+  port: 30429
 
 

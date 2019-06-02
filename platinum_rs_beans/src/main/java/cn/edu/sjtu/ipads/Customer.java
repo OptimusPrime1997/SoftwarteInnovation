@@ -1,7 +1,6 @@
 package cn.edu.sjtu.ipads;
 
 
-import com.sun.scenario.effect.InvertMask;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

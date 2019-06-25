@@ -9,7 +9,7 @@ for value in ${build_dirs[@]}
 do
 	echo "start to build $value"
 	cd $value
-	mvn clean package -DSkipTests=True
+	mvn clean package -Dmaven.test.skip=true
 	cd ..
 done
 

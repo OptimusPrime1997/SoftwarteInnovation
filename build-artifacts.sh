@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 build_dirs=("config-center-service" "buyer-info-service" "item-info-service"
 "layer1-buyer-seller-service"
-"order-service" "spring-cloud-eureka-service" "store-service")
+"order-service" "spring-cloud-eureka-service" "store-service" "home-page-service")
 cd platinum_rs_beans
 mvn clean install -DSkipTests=True
 cd ..

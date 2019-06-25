@@ -12,4 +12,4 @@ spring:
     name: eureka-service
 
 server:
-  port: 8761
+  port: 30427

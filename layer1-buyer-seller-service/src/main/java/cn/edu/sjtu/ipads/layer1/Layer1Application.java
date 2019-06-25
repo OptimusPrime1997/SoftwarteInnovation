@@ -25,10 +25,7 @@ public class Layer1Application {
     @Value("${key}")
     private String key;
 
-    @GetMapping("/info")
-    void info(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/swagger-ui.html");
-    }
+
 
     @GetMapping("/key")
     String key() {

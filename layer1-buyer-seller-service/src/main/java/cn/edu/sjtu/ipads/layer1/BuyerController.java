@@ -126,4 +126,9 @@ public class BuyerController {
         return new Response<>(order.getOrderId());
     }
 
+    @GetMapping("/info")
+    void info(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/swagger-ui.html");
+    }
+
 }

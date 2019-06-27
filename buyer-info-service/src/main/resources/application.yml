@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://202.120.40.8:30427/eureka/
+      defaultZone: http://eureka-host:30427/eureka/
   instance:
     hostname: buyer-info-service
 

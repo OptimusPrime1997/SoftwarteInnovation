@@ -13,9 +13,3 @@ do
 	cd ..
 done
 
-if [ ! -e artifacts ]
-then
-    mkdir artifacts
-fi
-
-cp *service/target/*.jar artifacts/

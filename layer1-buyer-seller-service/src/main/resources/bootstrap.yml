@@ -2,7 +2,7 @@ spring:
   cloud:
     config:
       profile: dev
-      uri: http://localhost:30429/
+      uri: http://config-server:30429/
 
 management:
   security:

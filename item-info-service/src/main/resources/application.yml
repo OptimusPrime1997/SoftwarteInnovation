@@ -2,10 +2,12 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://eureka-host:30427/eureka/
+  instance:
+    hostname: item-info-service
 
 spring:
   application:
-    name: item-info
+    name: item-info-service
 
 server:
   port: 30425

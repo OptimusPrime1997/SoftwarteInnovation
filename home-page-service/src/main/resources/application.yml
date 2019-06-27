@@ -2,10 +2,11 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://eureka-host:30427/eureka/
-
+  instance:
+    hostname: store-homepage-service
 spring:
   application:
-    name: homepage-service
+    name: store-homepage-service
 
 server:
   port: 30426

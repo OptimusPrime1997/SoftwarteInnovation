@@ -32,6 +32,12 @@ public class Layer1Application {
         return key;
     }
 
+
+    @GetMapping("/info")
+    void info(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/swagger-ui.html");
+    }
+
     @Bean
     @LoadBalanced
     RestTemplate initRestTemplate() {
